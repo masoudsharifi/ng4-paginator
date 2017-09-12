@@ -1,4 +1,4 @@
-<h1>ng4-autocomplete-textbox</h1>
+<h1>ng4-paginator</h1>
 
 This is an angular 4 module that allows for adding a paginator to an existing angular app.
 

@@ -1,6 +1,6 @@
 {
   "name": "ng4-paginator",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "This is an angular module to let you add paginator to your lists",
   "main": "ng4-paginator.umd.js",
   "jsnext:main": "ng4-paginator.esm.js",
