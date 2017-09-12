@@ -105,6 +105,7 @@ import {
     constructor(
       private _changeDetectorRef: ChangeDetectorRef) { 
       this.pageNumbers = [];
+      this.currentPage = 1;
     }
   
     ngOnInit() {
@@ -115,8 +116,7 @@ import {
       this.lastPageGroupNumber = Math.floor(this.totalPageCount / this.pagesPerGroup);
       if((this.totalPageCount % this.pagesPerGroup) !== 0) {
         this.lastPageGroupNumber++;
-      }
-      this.currentPage = 1;    
+      }   
       this.populatePageArray();
     }
   
@@ -132,10 +132,11 @@ import {
       }
       let i = this.startPageNumber;
   
-      let count = this.pageNumbers.length;
-      for(var k = 0;k < count;k++) {
-        this.pageNumbers.pop();
-      }
+      // let count = this.pageNumbers.length;
+      // for(var k = 0;k < count;k++) {
+      //   this.pageNumbers.pop();
+      // }
+      this.pageNumbers = [];
   
       let j = this.startPageNumber;
       for(;j < (this.startPageNumber + this.pagesPerGroup) && j <= this.totalPageCount;j++) {
