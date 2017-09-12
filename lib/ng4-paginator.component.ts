@@ -20,13 +20,11 @@ import {
             <button 
                 *ngIf="pageGroupNumber > 1"
                 class="page-btn page-btn-default"
-                (click)="onPageSelectionChange(startPageNumber - 1)">&lt;</button>
-    
+                (click)="onPageSelectionChange(startPageNumber - 1)">&lt;</button>    
             <button
                 *ngFor="let page of pageNumbers"
                 [ngClass]="[page == currentPage ? 'page-btn page-btn-primary' : 'page-btn page-btn-default']"
-                (click)="onPageSelectionChange(page)">{{page}}</button>  
-    
+                (click)="onPageSelectionChange(page)">{{page}}</button>&nbsp;    
             <button
                 *ngIf="pageGroupNumber < lastPageGroupNumber"
                 class="page-btn page-btn-default"
@@ -104,8 +102,8 @@ import {
   
     constructor(
       private _changeDetectorRef: ChangeDetectorRef) { 
-      this.pageNumbers = [];
-      this.currentPage = 1;
+        this.currentPage = 1;
+        this.pageNumbers = [];
     }
   
     ngOnInit() {
@@ -120,7 +118,9 @@ import {
       this.populatePageArray();
     }
   
-    populatePageArray() {
+    populatePageArray() {      
+      this.pageNumbers = [];
+
       this.pageGroupNumber = Math.floor(this.currentPage / this.pagesPerGroup);
       if(this.currentPage % this.pagesPerGroup !== 0) {
         this.pageGroupNumber++;
@@ -136,7 +136,6 @@ import {
       // for(var k = 0;k < count;k++) {
       //   this.pageNumbers.pop();
       // }
-      this.pageNumbers = [];
   
       let j = this.startPageNumber;
       for(;j < (this.startPageNumber + this.pagesPerGroup) && j <= this.totalPageCount;j++) {
