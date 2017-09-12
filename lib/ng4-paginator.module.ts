@@ -6,8 +6,6 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { Ng4PaginatorComponent } from "./ng4-paginator.component";
 
-
-
 @NgModule({
     imports: [
         HttpModule,

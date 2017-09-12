@@ -21,16 +21,16 @@ import {
                 *ngIf="pageGroupNumber > 1"
                 class="page-btn page-btn-default"
                 (click)="onPageSelectionChange(startPageNumber - 1)">&lt;</button>    
-            <button
+            <a
                 *ngFor="let page of pageNumbers"
-                [ngClass]="[page == currentPage ? 'page-btn page-btn-primary' : 'page-btn page-btn-default']"
-                (click)="onPageSelectionChange(page)">{{page}}</button>&nbsp;    
+                [ngClass]="[page === currentPage ? 'page-btn page-btn-primary' : 'page-btn page-btn-default']"
+                (click)="onPageSelectionChange(page)">{{page}}</a>    
             <button
                 *ngIf="pageGroupNumber < lastPageGroupNumber"
                 class="page-btn page-btn-default"
-                (click)="onPageSelectionChange(startPageNumber + pagesPerGroup)">&gt;</button>
+                (click)="onPageSelectionChange(lastPageNumber)">&gt;</button>
             <button
-                *ngIf="currentPage < totalPageCount "
+                *ngIf="pageGroupNumber < lastPageGroupNumber && currentPage < totalPageCount "
                 class="page-btn page-btn-default"
                 (click)="onPageSelectionChange(totalPageCount)">&gt;&gt;</button>
         </div>
@@ -118,9 +118,7 @@ import {
       this.populatePageArray();
     }
   
-    populatePageArray() {      
-      this.pageNumbers = [];
-
+    populatePageArray() {   
       this.pageGroupNumber = Math.floor(this.currentPage / this.pagesPerGroup);
       if(this.currentPage % this.pagesPerGroup !== 0) {
         this.pageGroupNumber++;
@@ -131,17 +129,23 @@ import {
         this.startPageNumber = 1;
       }
       let i = this.startPageNumber;
-  
-      // let count = this.pageNumbers.length;
-      // for(var k = 0;k < count;k++) {
-      //   this.pageNumbers.pop();
-      // }
-  
+
+      for(let i = 0;i < this.pageNumbers.length;i++) {
+        this.pageNumbers.pop();
+      }
+      this.pageNumbers = [];
+        
       let j = this.startPageNumber;
-      for(;j < (this.startPageNumber + this.pagesPerGroup) && j <= this.totalPageCount;j++) {
+      let maxJ = this.startPageNumber;
+      maxJ += +this.pagesPerGroup;
+
+      // let pages = '';
+      for(;j < maxJ && j <= this.totalPageCount;j++) {
         this.pageNumbers.push(j);
+        // pages += j + ',';
       } 
       this.lastPageNumber = j;
+      // console.log('pages: ' + pages);
       this._changeDetectorRef.detectChanges();
     }
   
