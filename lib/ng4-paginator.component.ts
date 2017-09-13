@@ -4,38 +4,46 @@ import {
     OnInit,
     Component,
     EventEmitter,
-    ChangeDetectorRef
+    // ChangeDetectorRef,
+    DoCheck
   } from '@angular/core';
   
   @Component({
     selector: 'ng4-paginator',
-    template: `
-    <div class="row">
-        <div class="col-sm-12">
-        <div class="btn-group">
+    template: `  
+      <table>
+        <tr>
+          <td>
             <button
-                *ngIf="pageGroupNumber > 1"
-                class="page-btn page-btn-default"
-                (click)="onPageSelectionChange(1)">&lt;&lt;</button>
+              *ngIf="pageGroupNumber > 1"
+              class="page-btn page-btn-default"
+              (click)="onPageSelectionChange(1)">&lt;&lt;</button>
+          </td>
+          <td>
             <button 
-                *ngIf="pageGroupNumber > 1"
-                class="page-btn page-btn-default"
-                (click)="onPageSelectionChange(startPageNumber - 1)">&lt;</button>    
+              *ngIf="pageGroupNumber > 1"
+              class="page-btn page-btn-default"
+              (click)="onPageSelectionChange(startPageNumber - 1)">&lt;</button>
+          </td>
+          <td *ngFor="let num of pageNumbers">
             <a
-                *ngFor="let page of pageNumbers"
-                [ngClass]="[page === currentPage ? 'page-btn page-btn-primary' : 'page-btn page-btn-default']"
-                (click)="onPageSelectionChange(page)">{{page}}</a>    
+              [ngClass]="[num === currentPage ? 'page-btn page-btn-primary' : 'page-btn page-btn-default']"
+              (click)="onPageSelectionChange(num)">{{num}}</a>
+          </td>
+          <td>
             <button
-                *ngIf="pageGroupNumber < lastPageGroupNumber"
-                class="page-btn page-btn-default"
-                (click)="onPageSelectionChange(lastPageNumber)">&gt;</button>
+              *ngIf="pageGroupNumber < lastPageGroupNumber"
+              class="page-btn page-btn-default"
+              (click)="onPageSelectionChange(lastPageNumber)">&gt;</button>
+          </td>
+          <td>
             <button
-                *ngIf="pageGroupNumber < lastPageGroupNumber && currentPage < totalPageCount "
-                class="page-btn page-btn-default"
-                (click)="onPageSelectionChange(totalPageCount)">&gt;&gt;</button>
-        </div>
-        </div>
-    </div>
+              *ngIf="pageGroupNumber < lastPageGroupNumber && currentPage < totalPageCount "
+              class="page-btn page-btn-default"
+              (click)="onPageSelectionChange(totalPageCount)">&gt;&gt;</button>
+          </td>
+        </tr>
+      </table>
     `,
     styles: [`
     .page-btn {
@@ -84,9 +92,43 @@ import {
         background-color: #ebebeb;
         border-color: #adadad;
     }
+    .row {
+      margin-right: 0px;
+      margin-left: 0px;
+    }
+    
+    .row:before,
+    .row:after {
+      display: table;
+      content: " ";
+    }
+    
+    .row:after {
+      clear: both;
+    }
+    
+    .row:before,
+    .row:after {
+      display: table;
+      content: " ";
+    }
+    
+    .row:after {
+      clear: both;
+    }   
+    .group-button {
+      position: relative;
+      display: inline-block;
+      vertical-align: middle;
+      float: left;
+    }
+    .group-button > .btn:first-child:not(:last-child) {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
     `]
   })
-  export class Ng4PaginatorComponent implements OnInit {
+  export class Ng4PaginatorComponent implements OnInit, DoCheck {
     @Input() totalRecords: number = 0;
     @Input() pagesPerGroup: number = 5;
     @Input() recordsPerPage: number = 10;
@@ -101,12 +143,13 @@ import {
     pageNumbers: number[]; 
   
     constructor(
-      private _changeDetectorRef: ChangeDetectorRef) { 
-        this.currentPage = 1;
-        this.pageNumbers = [];
-    }
+      // private _changeDetectorRef: ChangeDetectorRef
+    ) {}
   
     ngOnInit() {
+      this.currentPage = 1;
+      this.pageNumbers = [];
+
       this.totalPageCount = Math.floor(this.totalRecords / this.recordsPerPage);
       if(this.totalRecords % this.recordsPerPage !== 0) {
         this.totalPageCount++;
@@ -117,8 +160,12 @@ import {
       }   
       this.populatePageArray();
     }
+
+    ngDoCheck() {
+      console.log('Something changed...');
+    }
   
-    populatePageArray() {   
+    populatePageArray() {  
       this.pageGroupNumber = Math.floor(this.currentPage / this.pagesPerGroup);
       if(this.currentPage % this.pagesPerGroup !== 0) {
         this.pageGroupNumber++;
@@ -130,26 +177,19 @@ import {
       }
       let i = this.startPageNumber;
 
-      for(let i = 0;i < this.pageNumbers.length;i++) {
-        this.pageNumbers.pop();
-      }
-      this.pageNumbers = [];
-        
+      this.pageNumbers = [];        
       let j = this.startPageNumber;
       let maxJ = this.startPageNumber;
       maxJ += +this.pagesPerGroup;
 
-      // let pages = '';
       for(;j < maxJ && j <= this.totalPageCount;j++) {
         this.pageNumbers.push(j);
-        // pages += j + ',';
       } 
       this.lastPageNumber = j;
-      // console.log('pages: ' + pages);
-      this._changeDetectorRef.detectChanges();
+      // this._changeDetectorRef.detectChanges();
     }
   
-    onPageSelectionChange(newPageNumber) {    
+    onPageSelectionChange(newPageNumber) {          
       if(newPageNumber > 0 && newPageNumber <= this.totalPageCount) {
         this.currentPage = newPageNumber;
         this.populatePageArray();    
