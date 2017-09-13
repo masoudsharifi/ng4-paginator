@@ -4,8 +4,7 @@ import {
     OnInit,
     Component,
     EventEmitter,
-    // ChangeDetectorRef,
-    DoCheck
+    ChangeDetectorRef,
   } from '@angular/core';
   
   @Component({
@@ -128,7 +127,7 @@ import {
     }
     `]
   })
-  export class Ng4PaginatorComponent implements OnInit, DoCheck {
+  export class Ng4PaginatorComponent implements OnInit {
     @Input() totalRecords: number = 0;
     @Input() pagesPerGroup: number = 5;
     @Input() recordsPerPage: number = 10;
@@ -143,7 +142,7 @@ import {
     pageNumbers: number[]; 
   
     constructor(
-      // private _changeDetectorRef: ChangeDetectorRef
+      private _changeDetectorRef: ChangeDetectorRef
     ) {}
   
     ngOnInit() {
@@ -159,10 +158,6 @@ import {
         this.lastPageGroupNumber++;
       }   
       this.populatePageArray();
-    }
-
-    ngDoCheck() {
-      console.log('Something changed...');
     }
   
     populatePageArray() {  
@@ -186,7 +181,7 @@ import {
         this.pageNumbers.push(j);
       } 
       this.lastPageNumber = j;
-      // this._changeDetectorRef.detectChanges();
+      this._changeDetectorRef.detectChanges();
     }
   
     onPageSelectionChange(newPageNumber) {          
