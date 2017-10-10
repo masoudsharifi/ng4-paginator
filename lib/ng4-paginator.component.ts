@@ -133,17 +133,15 @@ import {
     @Input() recordsPerPage: number = 10;
     @Output() currentPageChanged: EventEmitter<number> = new EventEmitter<number>();
   
-    totalPageCount: number;
     currentPage: number;
-    startPageNumber: number;
-    lastPageNumber: number;
-    pageGroupNumber: number = 1;
-    lastPageGroupNumber: number;
     pageNumbers: number[]; 
+    lastPageNumber: number;
+    totalPageCount: number;
+    startPageNumber: number;
+    lastPageGroupNumber: number;
+    pageGroupNumber: number = 1;
   
-    constructor(
-      private _changeDetectorRef: ChangeDetectorRef
-    ) {}
+    constructor(private _changeDetectorRef: ChangeDetectorRef) {}
   
     ngOnInit() {
       this.currentPage = 1;
